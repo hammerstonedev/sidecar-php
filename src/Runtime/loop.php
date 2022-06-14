@@ -6,11 +6,11 @@
  * @see https://github.com/laravel/vapor-core/blob/2.0/stubs/cliRuntime.php
  */
 
+use Hammerstone\Sidecar\PHP\Support\CustomLambdaRuntime;
+use Hammerstone\Sidecar\PHP\Support\ProcessRunner;
 use Illuminate\Contracts\Console\Kernel;
 use Laravel\Vapor\Runtime\LambdaContainer;
 use Laravel\Vapor\Runtime\StorageDirectories;
-use Hammerstone\Sidecar\PHP\Support\ProcessRunner;
-use Hammerstone\Sidecar\PHP\Support\CustomLambdaRuntime;
 
 echo 'Starting Sidecar\'s event handling loop' . PHP_EOL;
 

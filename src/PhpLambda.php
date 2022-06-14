@@ -5,13 +5,36 @@
 
 namespace Hammerstone\Sidecar\PHP;
 
+use Aws\Result;
+use Hammerstone\Sidecar\Clients\LambdaClient;
 use Hammerstone\Sidecar\LambdaFunction;
-use Hammerstone\Sidecar\Region;
 use Hammerstone\Sidecar\Runtime;
 use Laravel\SerializableClosure\SerializableClosure;
 
 class PhpLambda extends LambdaFunction
 {
+    public static function mock(): void
+    {
+        if (app()->runningUnitTests() === false) {
+            return;
+        }
+
+        test()->mock(LambdaClient::class)
+            ->shouldReceive('invoke')
+            ->andReturnUsing(fn (array $payload) => pipeline($payload)->through([
+                carry(fn (array $payload) => json_decode($payload['Payload'], true)),
+                carry(fn (array $payload) => $payload['closure']),
+                carry(fn (string $encodedClosure) => base64_decode($encodedClosure)),
+                carry(fn (string $serializedClosure) => unserialize($serializedClosure)),
+                carry(fn (SerializableClosure $closure) => $closure()),
+                carry(fn (array $data) => new Result([
+                    'Payload' => json_encode($data),
+                    'FunctionError' => '',
+                    'LogResult' => base64_encode(''),
+                ])),
+            ])->thenReturn());
+    }
+
     public function name()
     {
         return 'PHP-Lambda';
@@ -56,7 +79,7 @@ class PhpLambda extends LambdaFunction
         }
 
         return [
-            'closure' => base64_encode(serialize(new SerializableClosure($payload)))
+            'closure' => base64_encode(serialize(new SerializableClosure($payload))),
         ];
     }
 

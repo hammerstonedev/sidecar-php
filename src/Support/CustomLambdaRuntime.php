@@ -33,6 +33,4 @@ class CustomLambdaRuntime extends LambdaRuntime
             'stackTrace' => explode(PHP_EOL, $data->traceAsString),
         ]);
     }
-
-
 }

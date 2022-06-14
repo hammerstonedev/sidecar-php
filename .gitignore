@@ -1,6 +1,8 @@
 /vendor
 /storage/framework/testing
 .env
+.env.*
+!.env.example
 .phpunit.result.cache
 npm-debug.log
 yarn-error.log

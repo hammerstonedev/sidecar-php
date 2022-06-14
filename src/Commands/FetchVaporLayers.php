@@ -4,8 +4,8 @@ namespace Hammerstone\Sidecar\PHP\Commands;
 
 use Hammerstone\Sidecar\Clients\LambdaClient;
 use Hammerstone\Sidecar\PHP\VaporLayers;
-use Illuminate\Console\Command;
 use Hammerstone\Sidecar\Region;
+use Illuminate\Console\Command;
 use Illuminate\Support\Arr;
 
 class FetchVaporLayers extends Command

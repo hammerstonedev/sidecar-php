@@ -11,14 +11,14 @@ use Illuminate\Support\Arr;
 
 class VaporLayers
 {
-    const PHP_74 = 'php-74al2';
-    const PHP_80 = 'php-80al2';
-    const PHP_81 = 'php-81al2';
-
     /**
      * @var string
      */
     public static $defaultPhpVersion;
+
+    const PHP_74 = 'php-74al2';
+    const PHP_80 = 'php-80al2';
+    const PHP_81 = 'php-81al2';
 
     public static $layers = [
         Region::US_EAST_1 => [
@@ -79,7 +79,7 @@ class VaporLayers
         return [
             self::PHP_74,
             self::PHP_80,
-            self::PHP_81
+            self::PHP_81,
         ];
     }
 
@@ -88,10 +88,10 @@ class VaporLayers
         $version = $version ?? static::guessPhpVersion();
         $region = $region ?? config('sidecar.aws_region');
 
-        $revision = Arr::get(static::$layers, "$region.$version", false);
+        $revision = Arr::get(static::$layers, "{$region}.{$version}", false);
 
         if ($revision === false) {
-            throw new Exception("Unable to find PHP layer for $version in $region.");
+            throw new Exception("Unable to find PHP layer for {$version} in {$region}.");
         }
 
         return "arn:aws:lambda:{$region}:959512994844:layer:vapor-$version:$revision";
@@ -117,5 +117,4 @@ class VaporLayers
 
         throw new Exception('Unable to guess the correct PHP layer to use.');
     }
-
 }

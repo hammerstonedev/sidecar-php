@@ -6,11 +6,11 @@
 namespace Hammerstone\Sidecar\PHP\Support;
 
 use Exception;
-use Throwable;
 use Illuminate\Support\Str;
-use Symfony\Component\Process\Process;
-use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Exception\ProcessTimedOutException;
+use Symfony\Component\Process\PhpExecutableFinder;
+use Symfony\Component\Process\Process;
+use Throwable;
 
 class ProcessRunner
 {
@@ -26,16 +26,6 @@ class ProcessRunner
 
     /**
      * @param CustomLambdaRuntime $runtime
-     * @return static
-     * @throws Exception
-     */
-    public static function make(CustomLambdaRuntime $runtime)
-    {
-        return new static($runtime);
-    }
-
-    /**
-     * @param CustomLambdaRuntime $runtime
      * @throws Exception
      */
     public function __construct(CustomLambdaRuntime $runtime)
@@ -46,6 +36,16 @@ class ProcessRunner
         if ($this->binary === false) {
             throw new Exception('Unable to find PHP');
         }
+    }
+
+    /**
+     * @param CustomLambdaRuntime $runtime
+     * @return static
+     * @throws Exception
+     */
+    public static function make(CustomLambdaRuntime $runtime)
+    {
+        return new static($runtime);
     }
 
     /**
@@ -83,14 +83,13 @@ class ProcessRunner
         try {
             $process->run();
         } catch (ProcessTimedOutException $e) {
-            fwrite(STDERR, "Task timed out after $timeout.00 seconds" . PHP_EOL);
+            fwrite(STDERR, "Task timed out after {$timeout}.00 seconds" . PHP_EOL);
 
-            throw new Exception("Task timed out after $timeout.00 seconds");
+            throw new Exception("Task timed out after {$timeout}.00 seconds");
         } catch (Throwable $e) {
             throw new Exception('Unhandled process exception: ' . $e->getMessage());
         }
 
         return $process;
     }
-
 }

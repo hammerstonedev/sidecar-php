@@ -30,7 +30,7 @@ function handleException(Throwable $exception)
         'file' => $exception->getFile(),
         'line' => $exception->getLine(),
         'traceAsString' => $exception->getTraceAsString(),
-        'type' => get_class($exception)
+        'type' => get_class($exception),
     ]);
 
     echo "\n__START_EXCEPTION__{$exception}__END_EXCEPTION__";
@@ -39,7 +39,7 @@ function handleException(Throwable $exception)
 
 $options = getopt($short = '', [
     'file::',
-    'closure::'
+    'closure::',
 ]);
 
 if (array_key_exists('file', $options)) {
@@ -49,7 +49,7 @@ if (array_key_exists('file', $options)) {
 
 $closure = $options['closure'];
 
-if (!$closure) {
+if (! $closure) {
     handleException(new Exception('No closure defined.'));
 }
 
@@ -61,7 +61,7 @@ try {
 }
 
 $output = json_encode([
-    'output' => $output
+    'output' => $output,
 ]);
 
 echo "\n__START_FUNCTION_OUTPUT__{$output}__END_FUNCTION_OUTPUT__";
